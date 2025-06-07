@@ -11,6 +11,12 @@ from admin import setup_admin
 from database.db import db
 from models.index import *
 
+# Import blueprints
+from routes.users import users_bp
+from routes.characters import characters_bp
+from routes.planets import planets_bp
+from routes.favorites import favorites_bp
+
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
@@ -27,30 +33,21 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 
+# Register blueprints
+app.register_blueprint(users_bp)
+app.register_blueprint(characters_bp)
+app.register_blueprint(planets_bp)
+app.register_blueprint(favorites_bp)
+
 # Handle/serialize errors like a JSON object
-
-
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 # generate sitemap with all your endpoints
-
-
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
-
-
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-
-    return jsonify(response_body), 200
-
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
