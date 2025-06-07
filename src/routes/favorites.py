@@ -10,22 +10,18 @@ favorites_bp = Blueprint('favorites', __name__)
 @favorites_bp.route('/favorite/planet/<int:planet_id>', methods=['POST'])
 def add_favorite_planet(planet_id):
     """Añade un nuevo planet favorito al usuario actual con el id = planet_id"""
-    # Por ahora usaremos el usuario con ID 1 como usuario actual
-    # En un sistema real, esto vendría del token de autenticación
+
     user_id = request.json.get('user_id', 1) if request.json else 1
     
     try:
-        # Verificar que el planeta existe
         planet = Planet.query.get(planet_id)
         if not planet:
             return jsonify({'error': 'Planet not found'}), 404
         
-        # Verificar que el usuario existe
         user = User.query.get(user_id)
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
-        # Verificar si ya existe este favorito
         existing_favorite = Favorite.query.filter_by(
             user_id=user_id, 
             planet_id=planet_id
@@ -34,7 +30,6 @@ def add_favorite_planet(planet_id):
         if existing_favorite:
             return jsonify({'error': 'Planet already in favorites'}), 400
         
-        # Crear nuevo favorito
         new_favorite = Favorite(
             user_id=user_id,
             planet_id=planet_id,
@@ -60,22 +55,16 @@ def add_favorite_planet(planet_id):
 @favorites_bp.route('/favorite/people/<int:people_id>', methods=['POST'])
 def add_favorite_people(people_id):
     """Añade un nuevo people favorito al usuario actual con el id = people_id"""
-    # Por ahora usaremos el usuario con ID 1 como usuario actual
-    # En un sistema real, esto vendría del token de autenticación
     user_id = request.json.get('user_id', 1) if request.json else 1
     
     try:
-        # Verificar que el personaje existe
         character = Character.query.get(people_id)
         if not character:
             return jsonify({'error': 'Character not found'}), 404
         
-        # Verificar que el usuario existe
-        user = User.query.get(user_id)
         if not user:
             return jsonify({'error': 'User not found'}), 404
-        
-        # Verificar si ya existe este favorito
+
         existing_favorite = Favorite.query.filter_by(
             user_id=user_id, 
             character_id=people_id
@@ -84,7 +73,6 @@ def add_favorite_people(people_id):
         if existing_favorite:
             return jsonify({'error': 'Character already in favorites'}), 400
         
-        # Crear nuevo favorito
         new_favorite = Favorite(
             user_id=user_id,
             planet_id=None,
@@ -110,12 +98,9 @@ def add_favorite_people(people_id):
 @favorites_bp.route('/favorite/planet/<int:planet_id>', methods=['DELETE'])
 def remove_favorite_planet(planet_id):
     """Elimina un planet favorito con el id = planet_id"""
-    # Por ahora usaremos el usuario con ID 1 como usuario actual
-    # En un sistema real, esto vendría del token de autenticación
     user_id = request.args.get('user_id', 1, type=int)
     
     try:
-        # Buscar el favorito
         favorite = Favorite.query.filter_by(
             user_id=user_id, 
             planet_id=planet_id
@@ -137,12 +122,9 @@ def remove_favorite_planet(planet_id):
 @favorites_bp.route('/favorite/people/<int:people_id>', methods=['DELETE'])
 def remove_favorite_people(people_id):
     """Elimina un people favorito con el id = people_id"""
-    # Por ahora usaremos el usuario con ID 1 como usuario actual
-    # En un sistema real, esto vendría del token de autenticación
     user_id = request.args.get('user_id', 1, type=int)
     
     try:
-        # Buscar el favorito
         favorite = Favorite.query.filter_by(
             user_id=user_id, 
             character_id=people_id

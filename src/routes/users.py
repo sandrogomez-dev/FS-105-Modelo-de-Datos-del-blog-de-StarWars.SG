@@ -28,8 +28,6 @@ def get_users():
 @users_bp.route('/users/favorites', methods=['GET'])
 def get_user_favorites():
     """Listar todos los favoritos que pertenecen al usuario actual"""
-    # Por ahora usaremos el usuario con ID 1 como usuario actual
-    # En un sistema real, esto vendría del token de autenticación
     user_id = request.args.get('user_id', 1, type=int)
     
     try:
@@ -42,7 +40,6 @@ def get_user_favorites():
                 'user_id': favorite.user_id
             }
             
-            # Si es un planeta favorito
             if favorite.planet_id:
                 planet = Planet.query.get(favorite.planet_id)
                 if planet:
@@ -54,7 +51,6 @@ def get_user_favorites():
                         'terrain': planet.terrain
                     }
             
-            # Si es un personaje favorito
             if favorite.character_id:
                 character = Character.query.get(favorite.character_id)
                 if character:

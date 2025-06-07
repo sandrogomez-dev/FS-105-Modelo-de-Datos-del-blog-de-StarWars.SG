@@ -12,7 +12,6 @@ def get_planets():
         planets_list = []
         
         for planet in planets:
-            # Obtener los personajes que son de este planeta
             residents = Character.query.filter_by(homeworld_id=planet.id).all()
             residents_list = []
             
@@ -44,7 +43,6 @@ def get_planet(planet_id):
         if not planet:
             return jsonify({'error': 'Planet not found'}), 404
         
-        # Obtener los personajes que son de este planeta
         residents = Character.query.filter_by(homeworld_id=planet.id).all()
         residents_list = []
         

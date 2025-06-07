@@ -12,7 +12,6 @@ def get_people():
         characters_list = []
         
         for character in characters:
-            # Obtener información del planeta de origen si existe
             homeworld = None
             if character.homeworld_id:
                 planet = Planet.query.get(character.homeworld_id)
@@ -45,7 +44,6 @@ def get_person(people_id):
         if not character:
             return jsonify({'error': 'Character not found'}), 404
         
-        # Obtener información del planeta de origen si existe
         homeworld = None
         if character.homeworld_id:
             planet = Planet.query.get(character.homeworld_id)
